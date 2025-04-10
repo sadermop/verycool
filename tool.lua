@@ -1,3 +1,4 @@
-YO YOY OY OY OY OY OYMOY OY
-you see the ????
-YO
+StarterGui
+└── ScreenGui
+    └── LocalScript (Paste the code below here)
+what?

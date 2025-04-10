@@ -1,0 +1,80 @@
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+local screenGui = script.Parent
+screenGui.ResetOnSpawn = false
+
+-- Custom image IDs (REPLACE with your assets!)
+local BACKGROUND_IMAGE_ID = "rbxassetid://12345678" -- background image
+local PLATE_IMAGE_ID = "rbxassetid://87654321" -- plate decal image
+local MENU_MUSIC_ID = "rbxassetid://11223344" -- replace with your music ID
+
+-- Play menu music
+local music = Instance.new("Sound")
+music.SoundId = MENU_MUSIC_ID
+music.Looped = true
+music.Volume = 0.5
+music.Playing = true
+music.Name = "MenuMusic"
+music.Parent = screenGui
+
+-- Background image
+local bg = Instance.new("ImageLabel")
+bg.Name = "Background"
+bg.Size = UDim2.new(1, 0, 1, 0)
+bg.Position = UDim2.new(0, 0, 0, 0)
+bg.BackgroundTransparency = 1
+bg.Image = BACKGROUND_IMAGE_ID
+bg.ZIndex = 0
+bg.Parent = screenGui
+
+-- Create circular button plate with hover effects
+local function createPlate(name, text, position, size, clickFunction)
+	local plate = Instance.new("ImageButton")
+	plate.Name = name
+	plate.Size = UDim2.new(0, size, 0, size)
+	plate.Position = position
+	plate.AnchorPoint = Vector2.new(0.5, 0.5)
+	plate.BackgroundTransparency = 1
+	plate.Image = PLATE_IMAGE_ID
+	plate.ScaleType = Enum.ScaleType.Stretch
+	plate.ZIndex = 2
+	plate.ImageColor3 = Color3.fromRGB(255, 255, 255)
+	plate.Parent = screenGui
+
+	local label = Instance.new("TextLabel")
+	label.Text = text
+	label.Font = Enum.Font.Garamond--interesting font
+	label.TextScaled = true
+	label.BackgroundTransparency = 1
+	label.Size = UDim2.new(1, 0, 1, 0)
+	label.TextColor3 = Color3.new(1, 1, 1)
+	label.ZIndex = 3
+	label.Parent = plate
+
+	-- Hover effect
+	plate.MouseEnter:Connect(function()
+		plate.ImageColor3 = Color3.fromRGB(180, 180, 180) -- darker
+	end)
+
+	plate.MouseLeave:Connect(function()
+		plate.ImageColor3 = Color3.fromRGB(255, 255, 255) -- normal
+	end)
+
+	if clickFunction then
+		plate.MouseButton1Click:Connect(clickFunction)
+	end
+end
+
+-- Positioning
+local center = UDim2.new(0.5, 0, 0.5, 0)
+local size = 150
+
+-- UI Buttons
+createPlate("TitlePlate", "World Conquest 1814", center - UDim2.new(0.3, 0, 0, 0), size, nil)
+createPlate("PlayPlate", "Play", center, size, function()
+	print("Game Started!")
+end)
+createPlate("CreditsPlate", "Credits", center + UDim2.new(0.3, 0, 0, 0), size, function()
+	print("Show credits UI")
+end)
